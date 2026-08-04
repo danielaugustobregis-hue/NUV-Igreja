@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Igreja Demo | Nuvflow</title>
+<meta name="description" content="Venha nos visitar. Cultos, eventos e comunidade.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #FDFBF7;
+  --warm: #F7F3EC;
+  --sand: #E8E0D4;
+  --gold: #96712B;
+  --gold-hover: #B8860B;
+  --gold-dim: rgba(150,113,43,0.07);
+  --gold-bd: rgba(150,113,43,0.18);
+  --bark: #2C2014;
+  --bark-mid: #4A3828;
+  --text: #2C2418;
+  --text-mid: #5C4E3E;
+  --text-dim: #8A7E70;
+  --white: #FFFFFF;
+  --sans: 'Inter', system-ui, sans-serif;
+  --serif: 'Playfair Display', Georgia, serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--cream); color: var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+/* ── Nav ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  background: transparent; transition: all 0.35s ease;
+}
+.nav.scrolled {
+  background: rgba(253,251,247,0.92);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+}
+.nav-brand { font-family: var(--serif); font-size: 1.1rem; font-weight: 700; color: var(--bark); text-decoration: none; }
+.nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+.nav-links a { font-size: 0.82rem; font-weight: 500; color: var(--text-mid); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--bark); }
+.nav-cta {
+  font-size: 0.8rem; font-weight: 600; color: var(--white); background: var(--bark);
+  padding: 0.55rem 1.3rem; border-radius: 8px; text-decoration: none;
+  transition: background 0.2s, transform 0.2s;
+}
+.nav-cta:hover { background: var(--bark-mid); transform: translateY(-1px); }
+
+/* ── Hero ── */
+.hero {
+  min-height: 100dvh; display: flex; align-items: center; justify-content: center;
+  text-align: center; padding: 6rem 1.5rem 4rem; position: relative;
+}
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background: url('https://images.pexels.com/photos/1666816/pexels-photo-1666816.jpeg?auto=compress&cs=tinysrgb&w=1920') center 30%/cover no-repeat;
+  opacity: 0.06;
+}
+.hero-content { position: relative; z-index: 1; max-width: 640px; }
+.hero-welcome {
+  font-size: 0.82rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 1.2rem;
+  opacity: 0; animation: fadeUp 0.7s 0.1s forwards;
+}
+.hero-title {
+  font-family: var(--serif); font-size: clamp(2.6rem, 5.5vw, 4rem); font-weight: 700;
+  line-height: 1.08; letter-spacing: -0.02em; color: var(--bark);
+  opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+}
+.hero-title em { font-style: italic; font-weight: 500; color: var(--gold); }
+.hero-sub {
+  font-size: clamp(0.95rem, 1.5vw, 1.05rem); color: var(--text-dim);
+  line-height: 1.65; max-width: 460px; margin: 1.2rem auto 0;
+  opacity: 0; animation: fadeUp 0.8s 0.35s forwards;
+}
+.hero-verse {
+  font-family: var(--serif); font-style: italic; font-size: 0.92rem;
+  color: var(--text-dim); margin-top: 2rem;
+  opacity: 0; animation: fadeUp 0.8s 0.45s forwards;
+}
+.hero-verse cite { font-style: normal; font-family: var(--sans); font-size: 0.75rem; color: var(--gold); display: block; margin-top: 0.3rem; }
+.hero-actions {
+  display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap;
+  margin-top: 2.5rem; opacity: 0; animation: fadeUp 0.8s 0.55s forwards;
+}
+.btn-dark {
+  font-size: 0.88rem; font-weight: 600; color: var(--white); background: var(--bark);
+  padding: 0.85rem 2rem; border-radius: 10px; text-decoration: none; border: none;
+  cursor: pointer; font-family: var(--sans);
+  transition: background 0.2s, transform 0.2s;
+}
+.btn-dark:hover { background: var(--bark-mid); transform: translateY(-1px); }
+.btn-text { font-size: 0.88rem; font-weight: 500; color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
+.btn-text:hover { color: var(--bark); }
+
+/* ── Info bar ── */
+.info-bar {
+  display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+  padding: 2rem 1.5rem; background: var(--warm);
+  border-top: 1px solid var(--sand); border-bottom: 1px solid var(--sand);
+}
+.info-item { text-align: center; }
+.info-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
+.info-value { font-size: 0.95rem; font-weight: 600; color: var(--bark); margin-top: 0.2rem; }
+
+/* ── Sections ── */
+section { position: relative; z-index: 1; }
+.container { max-width: 960px; margin: 0 auto; padding: 0 clamp(1.5rem, 4vw, 3rem); }
+.section-eyebrow { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.6rem; }
+.section-heading { font-family: var(--serif); font-size: clamp(1.7rem, 3vw, 2.3rem); font-weight: 700; line-height: 1.12; color: var(--bark); }
+.section-heading em { font-style: italic; font-weight: 500; color: var(--gold); }
+
+/* ── Cultos ── */
+.cultos { padding: 5rem 0; }
+.cultos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2.5rem; }
+.culto-card {
+  background: var(--white); border: 1px solid var(--sand); border-radius: 16px;
+  padding: 1.8rem; transition: transform 0.3s, box-shadow 0.3s;
+  opacity: 0; transform: translateY(16px);
+}
+.culto-card.visible { animation: cardUp 0.5s forwards; }
+.culto-card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.05); }
+.culto-day { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+.culto-name { font-family: var(--serif); font-size: 1.15rem; font-weight: 700; color: var(--bark); margin-bottom: 0.3rem; }
+.culto-time { font-size: 0.85rem; color: var(--text-mid); font-weight: 500; }
+.culto-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.6; margin-top: 0.5rem; }
+
+/* ── Sobre ── */
+.sobre { padding: 5rem 0; background: var(--warm); }
+.sobre-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-top: 2rem; }
+.sobre-text { font-size: 0.92rem; line-height: 1.75; color: var(--text-mid); }
+.sobre-text p { margin-bottom: 1rem; }
+.sobre-card {
+  background: var(--white); border: 1px solid var(--sand); border-radius: 20px;
+  padding: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+}
+.sobre-stat { text-align: center; }
+.sobre-stat-num { font-family: var(--serif); font-size: 2rem; font-weight: 700; color: var(--gold); line-height: 1; }
+.sobre-stat-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin-top: 0.25rem; }
+
+/* ── Evento ── */
+.evento { padding: 5rem 0; }
+.evento-card {
+  background: var(--bark); color: var(--cream); border-radius: 20px;
+  padding: 2.5rem; margin-top: 2.5rem;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: center;
+}
+.evento-eyebrow { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-hover); margin-bottom: 0.8rem; }
+.evento-title { font-family: var(--serif); font-size: 1.6rem; font-weight: 700; color: var(--cream); margin-bottom: 0.6rem; }
+.evento-desc { font-size: 0.85rem; color: rgba(253,251,247,0.55); line-height: 1.7; margin-bottom: 1.2rem; }
+.evento-meta { display: flex; gap: 2rem; }
+.evento-meta-label { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(253,251,247,0.3); }
+.evento-meta-value { font-size: 0.88rem; font-weight: 600; color: var(--cream); margin-top: 0.15rem; }
+.countdown-wrap { display: flex; flex-direction: column; align-items: center; }
+.countdown { display: flex; gap: 0.8rem; margin-bottom: 1.5rem; }
+.cd-item { text-align: center; }
+.cd-num {
+  font-family: var(--sans); font-size: 1.8rem; font-weight: 700; color: var(--gold-hover);
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; width: 60px; height: 60px;
+  display: flex; align-items: center; justify-content: center;
+}
+.cd-label { font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(253,251,247,0.3); margin-top: 0.3rem; }
+
+/* ── Formulário ── */
+.visita { padding: 5rem 0; background: var(--warm); }
+.form-card {
+  background: var(--white); border: 1px solid var(--sand); border-radius: 20px;
+  padding: 2.5rem; max-width: 480px; margin: 2rem auto 0;
+}
+.form-title { font-family: var(--serif); font-size: 1.2rem; font-weight: 700; color: var(--bark); margin-bottom: 0.3rem; }
+.form-sub { font-size: 0.82rem; color: var(--text-dim); margin-bottom: 1.5rem; line-height: 1.5; }
+.form-group { margin-bottom: 1rem; }
+.form-label { display: block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.35rem; }
+.form-input {
+  width: 100%; background: var(--cream); border: 1px solid var(--sand); border-radius: 10px;
+  padding: 0.75rem 1rem; font-size: 0.88rem; color: var(--text); font-family: var(--sans);
+  outline: none; transition: border-color 0.2s;
+}
+.form-input:focus { border-color: var(--gold); }
+.form-submit {
+  width: 100%; padding: 0.85rem; font-size: 0.85rem; font-weight: 700;
+  color: var(--white); background: var(--bark); border: none; border-radius: 10px;
+  cursor: pointer; font-family: var(--sans); margin-top: 0.3rem;
+  transition: background 0.2s, transform 0.2s;
+}
+.form-submit:hover { background: var(--bark-mid); transform: translateY(-1px); }
+
+/* ── Localização ── */
+.localizacao { padding: 5rem 0; }
+.loc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2rem; align-items: start; }
+.loc-items { display: flex; flex-direction: column; gap: 1rem; }
+.loc-row { display: flex; align-items: flex-start; gap: 0.7rem; }
+.loc-icon-wrap {
+  width: 36px; height: 36px; background: var(--gold-dim); border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0;
+}
+.loc-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); }
+.loc-value { font-size: 0.88rem; color: var(--bark); font-weight: 500; margin-top: 0.1rem; }
+.btn-gold {
+  font-size: 0.85rem; font-weight: 600; color: var(--white); background: var(--gold);
+  padding: 0.75rem 1.5rem; border-radius: 10px; text-decoration: none; display: inline-block;
+  margin-top: 0.8rem; transition: background 0.2s, transform 0.2s;
+}
+.btn-gold:hover { background: var(--gold-hover); transform: translateY(-1px); }
+.loc-map-placeholder {
+  background: var(--warm); border: 1px solid var(--sand); border-radius: 16px;
+  height: 260px; display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; color: var(--text-dim);
+}
+
+/* ── Footer ── */
+.footer {
+  background: var(--bark); padding: 3rem 0 1.5rem;
+}
+.footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+.footer-brand { font-family: var(--serif); font-size: 1.1rem; font-weight: 700; color: var(--cream); }
+.footer-links { display: flex; gap: 1.5rem; list-style: none; }
+.footer-links a { font-size: 0.78rem; color: rgba(253,251,247,0.4); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--cream); }
+.footer-bottom { text-align: center; margin-top: 2rem; padding-top: 1.2rem; border-top: 1px solid rgba(253,251,247,0.06); font-size: 0.7rem; color: rgba(253,251,247,0.25); }
+.footer-bottom a { color: rgba(150,113,43,0.6); text-decoration: none; }
+.footer-bottom a:hover { color: var(--gold-hover); }
+
+/* ── WhatsApp ── */
+.wa-float {
+  position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 99;
+  width: 50px; height: 50px; border-radius: 50%; background: #25D366;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 3px 16px rgba(37,211,102,0.3); text-decoration: none;
+  transition: transform 0.2s;
+}
+.wa-float:hover { transform: scale(1.08); }
+
+/* ── Animations ── */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes cardUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.6s, transform 0.6s; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav { padding: 0.8rem 1.2rem; }
+  .cultos-grid { grid-template-columns: 1fr; }
+  .sobre-grid, .loc-grid, .evento-card { grid-template-columns: 1fr; gap: 2rem; }
+  .info-bar { gap: 1.5rem; }
+  .cd-num { font-size: 1.4rem; width: 48px; height: 48px; }
+  .footer-inner { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-brand" id="nav-name">Comunidade Viva</a>
+  <ul class="nav-links">
+    <li><a href="#cultos">Cultos</a></li>
+    <li><a href="#sobre">Sobre nós</a></li>
+    <li><a href="#eventos">Eventos</a></li>
+  </ul>
+  <a href="#visita" class="nav-cta">Quero visitar</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-welcome" id="hero-bairro-label">Sobradinho, Brasília</p>
+    <h1 class="hero-title" id="hero-name">Comunidade <em>Viva</em></h1>
+    <p class="hero-sub">Um lugar para pessoas reais. Venha como você está, saia diferente de como chegou.</p>
+    <p class="hero-verse">
+      "Porque onde dois ou três estiverem reunidos em meu nome, ali estou eu no meio deles."
+      <cite>Mateus 18:20</cite>
+    </p>
+    <div class="hero-actions">
+      <a href="#visita" class="btn-dark">Quero visitar</a>
+      <a href="#cultos" class="btn-text">Ver horários dos cultos ↓</a>
+    </div>
+  </div>
+</section>
+
+<!-- Info bar -->
+<div class="info-bar">
+  <div class="info-item">
+    <div class="info-label">Próximo culto</div>
+    <div class="info-value">Domingo, 9h</div>
+  </div>
+  <div class="info-item">
+    <div class="info-label">Localização</div>
+    <div class="info-value" id="info-bairro">Sobradinho, DF</div>
+  </div>
+  <div class="info-item">
+    <div class="info-label">Contato</div>
+    <div class="info-value" id="info-tel">(61) 99999-9999</div>
+  </div>
+</div>
+
+<!-- Cultos -->
+<section class="cultos" id="cultos">
+  <div class="container">
+    <p class="section-eyebrow reveal">Programação</p>
+    <h2 class="section-heading reveal">Nossos <em>cultos</em></h2>
+    <div class="cultos-grid">
+      <div class="culto-card">
+        <div class="culto-day">Domingo</div>
+        <h3 class="culto-name">Culto da Família</h3>
+        <p class="culto-time" id="culto-dom">9h e 19h</p>
+        <p class="culto-desc">Adoração e ensino para toda a família. Espaço kids para crianças até 12 anos.</p>
+      </div>
+      <div class="culto-card">
+        <div class="culto-day">Quarta-feira</div>
+        <h3 class="culto-name">Estudo Bíblico</h3>
+        <p class="culto-time" id="culto-qua">19h30</p>
+        <p class="culto-desc">Estudo da Palavra com espaço para perguntas e reflexão em grupo.</p>
+      </div>
+      <div class="culto-card">
+        <div class="culto-day">Sexta-feira</div>
+        <h3 class="culto-name">Culto de Oração</h3>
+        <p class="culto-time" id="culto-sex">19h30</p>
+        <p class="culto-desc">Noite dedicada à intercessão, louvor e busca pela presença de Deus.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Sobre -->
+<section class="sobre" id="sobre">
+  <div class="container">
+    <div class="sobre-grid">
+      <div>
+        <p class="section-eyebrow reveal">Quem somos</p>
+        <h2 class="section-heading reveal">Uma igreja que acolhe <em>de verdade</em></h2>
+        <div class="sobre-text reveal" style="margin-top:1.2rem">
+          <p>Somos uma comunidade de pessoas reais, com histórias reais, que escolheram caminhar juntas na fé. Não importa de onde você vem ou em que momento da vida está.</p>
+          <p id="sobre-pastor">Acreditamos que a igreja existe para servir as pessoas e a cidade. Nosso compromisso é com o Evangelho vivido no dia a dia, não apenas pregado aos domingos.</p>
+        </div>
+      </div>
+      <div class="sobre-card reveal">
+        <div class="sobre-stat"><span class="sobre-stat-num" id="stat-anos">10+</span><span class="sobre-stat-label">Anos de história</span></div>
+        <div class="sobre-stat"><span class="sobre-stat-num">3</span><span class="sobre-stat-label">Cultos semanais</span></div>
+        <div class="sobre-stat"><span class="sobre-stat-num">5</span><span class="sobre-stat-label">Ministérios</span></div>
+        <div class="sobre-stat"><span class="sobre-stat-num" id="stat-bairro">Sobradinho</span><span class="sobre-stat-label">Brasília, DF</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Evento -->
+<section class="evento" id="eventos">
+  <div class="container">
+    <p class="section-eyebrow reveal">Próximo evento</p>
+    <h2 class="section-heading reveal">Momentos que marcam <em>vidas</em></h2>
+    <div class="evento-card reveal">
+      <div>
+        <p class="evento-eyebrow">Evento especial</p>
+        <h3 class="evento-title" id="evento-nome">Noite de Louvor e Adoração</h3>
+        <p class="evento-desc">Uma noite especial para adorar, orar e celebrar juntos. Traga sua família e seus amigos. A entrada é gratuita.</p>
+        <div class="evento-meta">
+          <div><div class="evento-meta-label">Data</div><div class="evento-meta-value" id="evento-data">Sábado, 16 de Agosto</div></div>
+          <div><div class="evento-meta-label">Horário</div><div class="evento-meta-value" id="evento-hora">19h</div></div>
+        </div>
+      </div>
+      <div class="countdown-wrap">
+        <div class="countdown">
+          <div class="cd-item"><div class="cd-num" id="cd-d">00</div><div class="cd-label">Dias</div></div>
+          <div class="cd-item"><div class="cd-num" id="cd-h">00</div><div class="cd-label">Horas</div></div>
+          <div class="cd-item"><div class="cd-num" id="cd-m">00</div><div class="cd-label">Min</div></div>
+          <div class="cd-item"><div class="cd-num" id="cd-s">00</div><div class="cd-label">Seg</div></div>
+        </div>
+        <a href="#visita" class="btn-dark">Quero participar</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Formulário -->
+<section class="visita" id="visita">
+  <div class="container" style="text-align:center">
+    <p class="section-eyebrow reveal">Primeira visita</p>
+    <h2 class="section-heading reveal">Vai ser a sua <em>primeira vez?</em></h2>
+    <div class="form-card reveal">
+      <div class="form-title">Conte um pouco sobre você</div>
+      <p class="form-sub">Preencha seus dados e a gente te recebe com todo carinho no próximo culto.</p>
+      <div class="form-group"><label class="form-label">Seu nome</label><input type="text" class="form-input" id="f-nome" placeholder="Como prefere ser chamado?"></div>
+      <div class="form-group"><label class="form-label">Seu telefone</label><input type="tel" class="form-input" id="f-tel" placeholder="(61) 99999-9999"></div>
+      <div class="form-group"><label class="form-label">Qual culto pretende visitar?</label>
+        <select class="form-input" id="f-culto" style="cursor:pointer;appearance:auto;-webkit-appearance:auto">
+          <option value="">Selecione...</option>
+          <option>Domingo de manhã</option>
+          <option>Domingo à noite</option>
+          <option>Quarta-feira</option>
+          <option>Sexta-feira</option>
+        </select>
+      </div>
+      <button class="form-submit" onclick="enviarWA()">Confirmar minha visita</button>
+    </div>
+  </div>
+</section>
+
+<!-- Localização -->
+<section class="localizacao" id="local">
+  <div class="container">
+    <p class="section-eyebrow reveal">Como chegar</p>
+    <h2 class="section-heading reveal">Estamos pertinho <em>de você</em></h2>
+    <div class="loc-grid">
+      <div class="loc-items reveal">
+        <div class="loc-row"><div class="loc-icon-wrap">📍</div><div><div class="loc-label">Endereço</div><div class="loc-value" id="loc-end">Sobradinho, Brasília, DF</div></div></div>
+        <div class="loc-row"><div class="loc-icon-wrap">🕐</div><div><div class="loc-label">Próximo culto</div><div class="loc-value">Domingo às 9h</div></div></div>
+        <div class="loc-row"><div class="loc-icon-wrap">📞</div><div><div class="loc-label">Contato</div><div class="loc-value" id="loc-tel">(61) 99999-9999</div></div></div>
+        <a id="loc-wa" href="#" class="btn-gold" target="_blank" rel="noopener">Falar pelo WhatsApp</a>
+      </div>
+      <div class="loc-map-placeholder reveal">Mapa disponível em breve</div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand" id="footer-name">Comunidade Viva</div>
+      <ul class="footer-links">
+        <li><a href="#cultos">Cultos</a></li>
+        <li><a href="#sobre">Sobre nós</a></li>
+        <li><a href="#eventos">Eventos</a></li>
+        <li><a href="#visita">Primeira Visita</a></li>
+      </ul>
+    </div>
+    <div class="footer-bottom">Presença digital por <a href="https://nuvflow.com" target="_blank" rel="noopener">Nuvflow</a></div>
+  </div>
+</footer>
+
+<!-- WhatsApp -->
+<a id="wa-float" href="#" class="wa-float" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+const P = new URLSearchParams(location.search);
+const nome = P.get('nome') || 'Comunidade Viva';
+const pastor = P.get('pastor') || '';
+const bairro = P.get('bairro') || 'Sobradinho, Brasília';
+const wa = P.get('whatsapp') || '5561999999999';
+const cDom = P.get('culto_dom') || '9h e 19h';
+const cQua = P.get('culto_qua') || '19h30';
+const cSex = P.get('culto_sex') || '19h30';
+const end = P.get('endereco') || bairro + ', DF';
+const tel = P.get('telefone') || '(61) 99999-9999';
+const evNome = P.get('evento') || 'Noite de Louvor e Adoração';
+const evData = P.get('evento_data') || 'Sábado, 16 de Agosto';
+const evHora = P.get('evento_hora') || '19h';
+const anos = P.get('anos') || '10+';
+
+document.title = nome + ' | ' + bairro;
+document.getElementById('nav-name').textContent = nome;
+const parts = nome.split(' ');
+document.getElementById('hero-name').innerHTML = parts.length > 1
+  ? parts.slice(0, -1).join(' ') + ' <em>' + parts[parts.length - 1] + '</em>'
+  : '<em>' + nome + '</em>';
+document.getElementById('hero-bairro-label').textContent = bairro;
+document.getElementById('info-bairro').textContent = bairro.split(',')[0] + ', DF';
+document.getElementById('info-tel').textContent = tel;
+document.getElementById('culto-dom').textContent = cDom;
+document.getElementById('culto-qua').textContent = cQua;
+document.getElementById('culto-sex').textContent = cSex;
+document.getElementById('footer-name').textContent = nome;
+document.getElementById('evento-nome').textContent = evNome;
+document.getElementById('evento-data').textContent = evData;
+document.getElementById('evento-hora').textContent = evHora;
+document.getElementById('stat-anos').textContent = anos;
+document.getElementById('stat-bairro').textContent = bairro.split(',')[0].trim();
+document.getElementById('loc-end').textContent = end;
+document.getElementById('loc-tel').textContent = tel;
+
+if (pastor) {
+  document.getElementById('sobre-pastor').textContent =
+    'Sob a liderança do ' + pastor + ', acreditamos que a igreja existe para servir as pessoas e a cidade. Nosso compromisso é com o Evangelho vivido no dia a dia, não apenas pregado aos domingos.';
+}
+
+const waUrl = 'https://wa.me/' + wa;
+document.getElementById('wa-float').href = waUrl + '?text=' + encodeURIComponent('Oi! Vi o site da igreja e gostaria de saber mais.');
+document.getElementById('loc-wa').href = waUrl + '?text=' + encodeURIComponent('Oi! Gostaria de informações sobre os cultos.');
+
+function tick() {
+  const t = new Date('2025-08-16T19:00:00-03:00'), n = new Date(), d = t - n;
+  if (d <= 0) return;
+  document.getElementById('cd-d').textContent = String(Math.floor(d / 864e5)).padStart(2, '0');
+  document.getElementById('cd-h').textContent = String(Math.floor(d % 864e5 / 36e5)).padStart(2, '0');
+  document.getElementById('cd-m').textContent = String(Math.floor(d % 36e5 / 6e4)).padStart(2, '0');
+  document.getElementById('cd-s').textContent = String(Math.floor(d % 6e4 / 1e3)).padStart(2, '0');
+}
+tick(); setInterval(tick, 1000);
+
+function enviarWA() {
+  const n = document.getElementById('f-nome').value.trim();
+  const t = document.getElementById('f-tel').value.trim();
+  const c = document.getElementById('f-culto').value;
+  if (!n || !t) { alert('Preencha seu nome e telefone para continuar.'); return; }
+  const msg = 'Oi! Meu nome é ' + n + ', meu telefone é ' + t + '.' +
+    (c ? ' Pretendo visitar no culto de ' + c + '.' : '') +
+    ' Vi o site e gostaria de confirmar minha primeira visita.';
+  window.open(waUrl + '?text=' + encodeURIComponent(msg), '_blank');
+}
+
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', scrollY > 60); });
+
+const obs = new IntersectionObserver(es => {
+  es.forEach((e, i) => {
+    if (e.isIntersecting) { e.target.style.transitionDelay = i * 0.06 + 's'; e.target.classList.add('visible'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal, .culto-card').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
